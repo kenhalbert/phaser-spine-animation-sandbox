@@ -11,6 +11,7 @@ class Robot {
 
     this.currentState = 'IDLE';
     this.walkSpeed = 125;
+    this.runSpeed = 600;
     this.isInitialized = false;
     this.scale = 0.25;
   }
@@ -37,6 +38,10 @@ class Robot {
     // smoothly transitions between animations instead of switching immediately
     this.spineObject.setMix('walk', 'idle', 0.3);
     this.spineObject.setMix('idle', 'walk', 0.3);
+    this.spineObject.setMix('idle', 'run', 0.3);
+    this.spineObject.setMix('walk', 'run', 0.3);
+    this.spineObject.setMix('run', 'walk', 0.3);
+    this.spineObject.setMix('run', 'idle', 0.3);
 
     this.isInitialized = true;
   }
@@ -48,6 +53,9 @@ class Robot {
       case 'WALK_RIGHT':
       case 'WALK_LEFT':
         return 'walk';
+      case 'RUN_RIGHT':
+      case 'RUN_LEFT':
+        return 'run';
       default:
         throw Error(`unsupported state ${this.currentState}`);
     }
@@ -77,6 +85,30 @@ class Robot {
     this.spineObject.setScale(this.scale, this.scale);
 
     this.spinePhysicsContainer.setVelocityX(this.walkSpeed);
+
+    this.changeAnimation();
+  }
+
+  runLeft() {
+    if (this.currentState === 'RUN_LEFT') return;
+
+    this.currentState = 'RUN_LEFT';
+
+    this.spineObject.setScale(-this.scale, this.scale);
+
+    this.spinePhysicsContainer.setVelocityX(-this.runSpeed);
+
+    this.changeAnimation();
+  }
+
+  runRight() {
+    if (this.currentState === 'RUN_RIGHT') return;
+
+    this.currentState = 'RUN_RIGHT';
+
+    this.spineObject.setScale(this.scale, this.scale);
+
+    this.spinePhysicsContainer.setVelocityX(this.runSpeed);
 
     this.changeAnimation();
   }

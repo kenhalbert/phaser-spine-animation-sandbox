@@ -23,9 +23,15 @@ class AnimationTestScene extends Phaser.Scene {
 
   update() {
     if (this.sceneData.controls.isMoveLeftActive()) {
-      this.sceneData.player.walkLeft();
+      if (this.sceneData.controls.isRunActive())
+        this.sceneData.player.runLeft();
+      else
+        this.sceneData.player.walkLeft();
     } else if (this.sceneData.controls.isMoveRightActive()) {
-      this.sceneData.player.walkRight();
+      if (this.sceneData.controls.isRunActive())
+        this.sceneData.player.runRight();
+      else
+        this.sceneData.player.walkRight();
     } else {
       this.sceneData.player.idle();
     }
