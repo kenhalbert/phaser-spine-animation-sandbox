@@ -8,7 +8,7 @@ class AnimationTestScene extends Phaser.Scene {
   }
 
   preload () {
-    this.load.image('tiles', 'assets/tilesets/robot-platformer-tileset.png');
+    this.load.image('tiles', 'assets/tilesets/robot-platformer-tileset-extruded.png');
     this.load.tilemapTiledJSON('map', 'assets/tilesets/level-1.json');
 
     this.load.setPath('assets/spine/');
@@ -76,7 +76,13 @@ class AnimationTestScene extends Phaser.Scene {
 
     const tileset = map.addTilesetImage(
       'robot-platformer-tileset',   // this needs to be the name of the tileset in the map data
-      'tiles'
+      'tiles',
+      64,
+      64,
+      // extrusion alters the dimensions of each tile and shifts their position in the atlas.
+      // so, we have to set margin = extrusionPx, spacing = extrusionPx*2
+      1,
+      2
     );
 
     map.createStaticLayer('Background', tileset, 0, 0);
