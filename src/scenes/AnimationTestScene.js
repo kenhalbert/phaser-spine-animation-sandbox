@@ -8,17 +8,41 @@ class AnimationTestScene extends Phaser.Scene {
   }
 
   preload () {
+    this.load.image('tiles', 'assets/tilesets/robot-platformer-tileset.png');
+    this.load.tilemapTiledJSON('map', 'assets/tilesets/level-1.json');
+
     this.load.setPath('assets/spine/');
-    this.load.spine('robot', 'robot.json', 'robot.atlas');
+    this.load.spine(
+      'robot', 
+      'robot.json', 
+      'robot.atlas'
+    );
   }
 
   create() {
     this.initProperties();
+    this.physics.world.setBounds(0, 0, 2000, 2000);
+
+    this.createMap();
 
     this.sceneData.player = new Robot(this, 'player');
-    this.sceneData.player.initialize(400, 600);
+    this.sceneData.player.initialize(100, 1800);
+
+    this.physics.add.collider(
+      this.sceneData.player.getContainer(), 
+      this.sceneData.map.platforms
+    );
 
     this.sceneData.controls = new PlayerControls(this);
+
+    this.cameras.main.setBounds(
+      0, 
+      0, 
+      2000, 
+      2000
+    );
+
+    this.cameras.main.startFollow(this.sceneData.player.getContainer(), true);
   }
 
   update() {
@@ -40,8 +64,26 @@ class AnimationTestScene extends Phaser.Scene {
   initProperties() {
     this.sceneData = {
       player: null,
-      controls: null
+      controls: null,
+      map: {
+        platforms: null
+      }
     };
+  }
+
+  createMap() {
+    const map = this.make.tilemap({ key: 'map' });
+
+    const tileset = map.addTilesetImage(
+      'robot-platformer-tileset',   // this needs to be the name of the tileset in the map data
+      'tiles'
+    );
+
+    map.createStaticLayer('Background', tileset, 0, 0);
+
+    this.sceneData.map.platforms = map.createStaticLayer('Platforms', tileset, 0, 0);
+
+    this.sceneData.map.platforms.setCollisionByExclusion(-1, true);
   }
 }
 

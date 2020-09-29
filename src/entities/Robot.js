@@ -13,7 +13,7 @@ class Robot {
     this.walkSpeed = 125;
     this.runSpeed = 600;
     this.isInitialized = false;
-    this.scale = 0.25;
+    this.scale = 0.2;
   }
 
   initialize(x, y) {
@@ -44,6 +44,10 @@ class Robot {
     this.spineObject.setMix('run', 'idle', 0.3);
 
     this.isInitialized = true;
+  }
+
+  getContainer() {
+    return this.spinePhysicsContainer;
   }
 
   getCurrentAnimation() {
