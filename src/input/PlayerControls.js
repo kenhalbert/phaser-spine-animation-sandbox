@@ -17,7 +17,7 @@ class PlayerControls {
     return this.keyD.isDown;
   }
 
-  isRunActive() {
+  isWalkActive() {
     return this.keyShift.isDown;
   }
 

@@ -12,7 +12,7 @@ class Robot {
     this.currentState = 'IDLE';
     this.walkSpeed = 125;
     this.runSpeed = 600;
-    this.jumpSpeed = 1200;
+    this.jumpSpeed = 1000;
     this.gravityY = 1000;
     this.isInitialized = false;
     this.scale = 0.2;
@@ -74,49 +74,50 @@ class Robot {
   }
 
   walkLeft() {
+    this.spinePhysicsContainer.setVelocityX(-this.walkSpeed);
+
     if (this.currentState === 'WALK_LEFT') return;
 
     this.currentState = 'WALK_LEFT';
 
     this.spineObject.setScale(-this.scale, this.scale);
 
-    this.spinePhysicsContainer.setVelocityX(-this.walkSpeed);
-
     this.changeAnimation();
   }
 
   walkRight() {
+    this.spinePhysicsContainer.setVelocityX(this.walkSpeed);
+
     if (this.currentState === 'WALK_RIGHT') return;
 
     this.currentState = 'WALK_RIGHT';
 
     this.spineObject.setScale(this.scale, this.scale);
 
-    this.spinePhysicsContainer.setVelocityX(this.walkSpeed);
 
     this.changeAnimation();
   }
 
   runLeft() {
+    this.spinePhysicsContainer.setVelocityX(-this.runSpeed);
+
     if (this.currentState === 'RUN_LEFT') return;
 
     this.currentState = 'RUN_LEFT';
 
     this.spineObject.setScale(-this.scale, this.scale);
 
-    this.spinePhysicsContainer.setVelocityX(-this.runSpeed);
-
     this.changeAnimation();
   }
 
   runRight() {
+    this.spinePhysicsContainer.setVelocityX(this.runSpeed);
+
     if (this.currentState === 'RUN_RIGHT') return;
 
     this.currentState = 'RUN_RIGHT';
 
     this.spineObject.setScale(this.scale, this.scale);
-
-    this.spinePhysicsContainer.setVelocityX(this.runSpeed);
 
     this.changeAnimation();
   }
