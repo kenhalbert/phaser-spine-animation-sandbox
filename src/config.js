@@ -5,10 +5,10 @@ import scenes from './scenes';
 export default {
   type: Phaser.AUTO,
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
+    width: '100%',
+    height: '100%',
     autoCenter: Phaser.DOM.CENTER_BOTH,
-    width: window.innerWidth,
-    height: window.innerHeight,
     parent: 'content'
   },
   physics: {

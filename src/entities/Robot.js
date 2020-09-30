@@ -14,6 +14,7 @@ class Robot {
     this.runSpeed = 600;
     this.jumpSpeed = 1000;
     this.gravityY = 1000;
+    this.animationMixTransitionLength = 0.3;
     this.isInitialized = false;
     this.scale = 0.2;
   }
@@ -40,16 +41,16 @@ class Robot {
     //this.spineObject.setSkinByName(this.state.skin);
 
     // smoothly transitions between animations instead of switching immediately
-    this.spineObject.setMix('walk', 'idle', 0.1);
-    this.spineObject.setMix('idle', 'walk', 0.1);
-    this.spineObject.setMix('idle', 'run', 0.1);
-    this.spineObject.setMix('walk', 'run', 0.1);
-    this.spineObject.setMix('run', 'walk', 0.1);
-    this.spineObject.setMix('run', 'idle', 0.1);
-    this.spineObject.setMix('jump', 'fall', 0.1);
-    this.spineObject.setMix('fall', 'run', 0.1);
-    this.spineObject.setMix('fall', 'idle', 0.1);
-    this.spineObject.setMix('jump', 'idle', 0.1);
+    this.spineObject.setMix('walk', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('idle', 'walk', this.animationMixTransitionLength);
+    this.spineObject.setMix('idle', 'run', this.animationMixTransitionLength);
+    this.spineObject.setMix('walk', 'run', this.animationMixTransitionLength);
+    this.spineObject.setMix('run', 'walk', this.animationMixTransitionLength);
+    this.spineObject.setMix('run', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('jump', 'fall', this.animationMixTransitionLength);
+    this.spineObject.setMix('fall', 'run', this.animationMixTransitionLength);
+    this.spineObject.setMix('fall', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('jump', 'idle', this.animationMixTransitionLength);
 
     this.isInitialized = true;
   }
