@@ -47,6 +47,8 @@ class AnimationTestScene extends Phaser.Scene {
   }
 
   update() {
+    this.sceneData.player.update();
+
     if (this.sceneData.controls.isJumpActive()) {
       this.sceneData.player.jump();
     }

@@ -40,14 +40,30 @@ class Robot {
     //this.spineObject.setSkinByName(this.state.skin);
 
     // smoothly transitions between animations instead of switching immediately
-    this.spineObject.setMix('walk', 'idle', 0.3);
-    this.spineObject.setMix('idle', 'walk', 0.3);
-    this.spineObject.setMix('idle', 'run', 0.3);
-    this.spineObject.setMix('walk', 'run', 0.3);
-    this.spineObject.setMix('run', 'walk', 0.3);
-    this.spineObject.setMix('run', 'idle', 0.3);
+    this.spineObject.setMix('walk', 'idle', 0.1);
+    this.spineObject.setMix('idle', 'walk', 0.1);
+    this.spineObject.setMix('idle', 'run', 0.1);
+    this.spineObject.setMix('walk', 'run', 0.1);
+    this.spineObject.setMix('run', 'walk', 0.1);
+    this.spineObject.setMix('run', 'idle', 0.1);
+    this.spineObject.setMix('jump', 'fall', 0.1);
+    this.spineObject.setMix('fall', 'run', 0.1);
+    this.spineObject.setMix('fall', 'idle', 0.1);
+    this.spineObject.setMix('jump', 'idle', 0.1);
 
     this.isInitialized = true;
+  }
+
+  update() {
+    if (!this.isAirborne() && (this.currentState === 'JUMPING' || this.currentState === 'FALLING')) {
+      this.currentState = 'LANDED';
+    }
+
+    if (this.isAirborne() && this.spinePhysicsContainer.body.velocity.y > 0 && this.currentState !== 'FALLING') {
+      this.currentState = 'FALLING';
+
+      this.changeAnimation(true);
+    }
   }
 
   getContainer() {
@@ -64,78 +80,91 @@ class Robot {
       case 'RUN_RIGHT':
       case 'RUN_LEFT':
         return 'run';
+      case 'JUMPING':
+        return 'jump';
+      case 'FALLING':
+        return 'fall';
       default:
         throw Error(`unsupported state ${this.currentState}`);
     }
   }
 
-  changeAnimation() {
-    this.spineObject.play(this.getCurrentAnimation(), true);
+  changeAnimation(loop) {
+    this.spineObject.play(this.getCurrentAnimation(), loop);
   }
 
   walkLeft() {
     this.spinePhysicsContainer.setVelocityX(-this.walkSpeed);
 
-    if (this.currentState === 'WALK_LEFT') return;
+    if (this.currentState === 'WALK_LEFT' || this.currentState === 'JUMPING' || this.currentState === 'FALLING') 
+      return;
 
     this.currentState = 'WALK_LEFT';
 
     this.spineObject.setScale(-this.scale, this.scale);
 
-    this.changeAnimation();
+    this.changeAnimation(true);
   }
 
   walkRight() {
     this.spinePhysicsContainer.setVelocityX(this.walkSpeed);
 
-    if (this.currentState === 'WALK_RIGHT') return;
+    if (this.currentState === 'WALK_RIGHT' || this.currentState === 'JUMPING' || this.currentState === 'FALLING') 
+      return;
 
     this.currentState = 'WALK_RIGHT';
 
     this.spineObject.setScale(this.scale, this.scale);
 
 
-    this.changeAnimation();
+    this.changeAnimation(true);
   }
 
   runLeft() {
     this.spinePhysicsContainer.setVelocityX(-this.runSpeed);
 
-    if (this.currentState === 'RUN_LEFT') return;
+    if (this.currentState === 'RUN_LEFT' || this.currentState === 'JUMPING' || this.currentState === 'FALLING') 
+      return;
 
     this.currentState = 'RUN_LEFT';
 
     this.spineObject.setScale(-this.scale, this.scale);
 
-    this.changeAnimation();
+    this.changeAnimation(true);
   }
 
   runRight() {
     this.spinePhysicsContainer.setVelocityX(this.runSpeed);
 
-    if (this.currentState === 'RUN_RIGHT') return;
+    if (this.currentState === 'RUN_RIGHT' || this.currentState === 'JUMPING' || this.currentState === 'FALLING') 
+      return;
 
     this.currentState = 'RUN_RIGHT';
 
     this.spineObject.setScale(this.scale, this.scale);
 
-    this.changeAnimation();
+    this.changeAnimation(true);
   }
 
   jump() {
     if (!this.isAirborne()) {
       this.spinePhysicsContainer.setVelocityY(-this.jumpSpeed);
+
+      this.currentState = 'JUMPING';
+
+      this.changeAnimation(false);
     }
   }
 
   idle() {
-    if (this.currentState === 'IDLE') return;
+    this.spinePhysicsContainer.setVelocityX(0);
+
+    if (this.currentState === 'IDLE' || this.currentState === 'JUMPING' || this.currentState === 'FALLING') 
+      return;
 
     this.currentState = 'IDLE';
 
-    this.spinePhysicsContainer.setVelocityX(0);
-
-    this.changeAnimation();
+    this.changeAnimation(true);
   }
 
   isAirborne() {
