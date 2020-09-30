@@ -4,6 +4,7 @@ class PlayerControls {
   constructor (scene) {
     this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
   }
@@ -18,6 +19,10 @@ class PlayerControls {
 
   isRunActive() {
     return this.keyShift.isDown;
+  }
+
+  isJumpActive() {
+    return this.keyW.isDown;
   }
 }
 

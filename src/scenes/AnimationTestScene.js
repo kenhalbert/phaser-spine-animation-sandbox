@@ -21,6 +21,7 @@ class AnimationTestScene extends Phaser.Scene {
 
   create() {
     this.initProperties();
+
     this.physics.world.setBounds(0, 0, 2000, 2000);
 
     this.createMap();
@@ -46,6 +47,10 @@ class AnimationTestScene extends Phaser.Scene {
   }
 
   update() {
+    if (this.sceneData.controls.isJumpActive()) {
+      this.sceneData.player.jump();
+    }
+
     if (this.sceneData.controls.isMoveLeftActive()) {
       if (this.sceneData.controls.isRunActive())
         this.sceneData.player.runLeft();
@@ -77,8 +82,9 @@ class AnimationTestScene extends Phaser.Scene {
     const tileset = map.addTilesetImage(
       'robot-platformer-tileset',   // this needs to be the name of the tileset in the map data
       'tiles',
-      64,
-      64,
+      undefined,
+      undefined,
+      
       // extrusion alters the dimensions of each tile and shifts their position in the atlas.
       // so, we have to set margin = extrusionPx, spacing = extrusionPx*2
       1,

@@ -12,6 +12,8 @@ class Robot {
     this.currentState = 'IDLE';
     this.walkSpeed = 125;
     this.runSpeed = 600;
+    this.jumpSpeed = 1200;
+    this.gravityY = 1000;
     this.isInitialized = false;
     this.scale = 0.2;
   }
@@ -32,6 +34,8 @@ class Robot {
       this.spineObject
     );
     this.spinePhysicsContainer.initialize();
+
+    this.spinePhysicsContainer.body.setGravityY(this.gravityY);
 
     //this.spineObject.setSkinByName(this.state.skin);
 
@@ -117,6 +121,12 @@ class Robot {
     this.changeAnimation();
   }
 
+  jump() {
+    if (!this.isAirborne()) {
+      this.spinePhysicsContainer.setVelocityY(-this.jumpSpeed);
+    }
+  }
+
   idle() {
     if (this.currentState === 'IDLE') return;
 
@@ -125,6 +135,10 @@ class Robot {
     this.spinePhysicsContainer.setVelocityX(0);
 
     this.changeAnimation();
+  }
+
+  isAirborne() {
+    return !this.spinePhysicsContainer.body.onFloor();
   }
 }
 

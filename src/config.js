@@ -14,7 +14,9 @@ export default {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: false
+      debug: false,
+      gravity: { y: 500 },
+      tileBias: 32  // defaults to 16.  setting it higher prevents tunneling through the terrain.
     }
   },
   plugins: {
