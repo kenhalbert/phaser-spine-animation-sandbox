@@ -42,11 +42,13 @@ class Robot {
 
     // smoothly transitions between animations instead of switching immediately
     this.spineObject.setMix('walk', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('walk', 'fall', this.animationMixTransitionLength);
+    this.spineObject.setMix('walk', 'run', this.animationMixTransitionLength);
     this.spineObject.setMix('idle', 'walk', this.animationMixTransitionLength);
     this.spineObject.setMix('idle', 'run', this.animationMixTransitionLength);
-    this.spineObject.setMix('walk', 'run', this.animationMixTransitionLength);
     this.spineObject.setMix('run', 'walk', this.animationMixTransitionLength);
     this.spineObject.setMix('run', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('run', 'fall', this.animationMixTransitionLength);
     this.spineObject.setMix('jump', 'fall', this.animationMixTransitionLength);
     this.spineObject.setMix('fall', 'run', this.animationMixTransitionLength);
     this.spineObject.setMix('fall', 'idle', this.animationMixTransitionLength);
