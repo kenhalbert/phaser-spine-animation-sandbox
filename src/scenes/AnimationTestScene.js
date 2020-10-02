@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Robot from '../entities/Robot';
+import FistBumpingRobots from '../entities/FistBumpingRobots';
 import PlayerControls from '../input/PlayerControls';
 
 class AnimationTestScene extends Phaser.Scene {
@@ -11,11 +12,18 @@ class AnimationTestScene extends Phaser.Scene {
     this.load.image('tiles', 'assets/tilesets/robot-platformer-tileset-extruded.png');
     this.load.tilemapTiledJSON('map', 'assets/tilesets/level-1.json');
 
-    this.load.setPath('assets/spine/');
+    this.load.setPath('assets/spine/robot');
     this.load.spine(
       'robot', 
       'robot.json', 
       'robot.atlas'
+    );
+
+    this.load.setPath('assets/spine/robotFistBump');
+    this.load.spine(
+      'robotFistBump', 
+      'robotFistBump.json', 
+      'robotFistBump.atlas'
     );
   }
 
@@ -44,9 +52,38 @@ class AnimationTestScene extends Phaser.Scene {
     );
 
     this.cameras.main.startFollow(this.sceneData.player.getContainer(), true);
+
+    this.sceneData.controls.onInteract(
+      () => {
+        this.sceneData.player.idle();
+
+        const playerContainer = this.sceneData.player.getContainer();
+
+        playerContainer.setVisible(false);
+        playerContainer.setActive(false);
+
+        const fistBumpingRobots = new FistBumpingRobots(this, 'fistBump');
+        fistBumpingRobots.initialize(playerContainer.x + 55, playerContainer.y);
+
+        fistBumpingRobots.onAnimationComplete(
+          () => {
+            fistBumpingRobots.destroy();
+
+            playerContainer.setActive(true);
+            playerContainer.setVisible(true);
+          }
+        )
+      }
+    )
   }
 
   update() {
+    this.updatePlayer();
+  }
+
+  updatePlayer() {
+    if (!this.sceneData.player.getContainer().active) return;
+    
     this.sceneData.player.update();
 
     if (this.sceneData.controls.isJumpActive()) {

@@ -7,6 +7,7 @@ class PlayerControls {
     this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+    this.keyEnter = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   }
 
   isMoveLeftActive() {
@@ -23,6 +24,10 @@ class PlayerControls {
 
   isJumpActive() {
     return this.keyW.isDown;
+  }
+
+  onInteract(callback) {
+    this.keyEnter.on('down', callback);
   }
 }
 

@@ -1,13 +1,10 @@
 import Phaser from 'phaser';
 import SpineArcadePhysicsContainer from '../physics/SpineArcadePhysicsContainer';
+import SpineEntityBase from './SpineEntityBase';
 
-class Robot {
+class Robot extends SpineEntityBase {
   constructor(scene, key) {
-    this.scene = scene;
-    this.key = key;
-
-    this.spineObject = null;
-    this.spinePhysicsContainer = null;
+    super(scene, key, 'robot', 0.2);
 
     this.currentState = 'IDLE';
     this.walkSpeed = 125;
@@ -19,26 +16,8 @@ class Robot {
     this.scale = 0.2;
   }
 
-  initialize(x, y) {
-    if (this.isInitialized) throw Error(`${this.key} already initialized`);
-
-    // create spine object at 0,0 since its position will be inherited from its container
-    this.spineObject = this.scene.add.spine(0, 0, 'robot', this.getCurrentAnimation(), true);
-    this.spineObject.scale = this.scale;
-
-    // use a physics-enabled Container to resolve issues with physics-enabled Spine game objects
-    this.spinePhysicsContainer = new SpineArcadePhysicsContainer(
-      this.scene,
-      `${this.key}_container`,
-      x,
-      y,
-      this.spineObject
-    );
-    this.spinePhysicsContainer.initialize();
-
+  initializeEntity() {
     this.spinePhysicsContainer.body.setGravityY(this.gravityY);
-
-    //this.spineObject.setSkinByName(this.state.skin);
 
     // smoothly transitions between animations instead of switching immediately
     this.spineObject.setMix('walk', 'idle', this.animationMixTransitionLength);
@@ -53,8 +32,10 @@ class Robot {
     this.spineObject.setMix('fall', 'run', this.animationMixTransitionLength);
     this.spineObject.setMix('fall', 'idle', this.animationMixTransitionLength);
     this.spineObject.setMix('jump', 'idle', this.animationMixTransitionLength);
+  }
 
-    this.isInitialized = true;
+  getDefaultAnimationName() {
+    return 'idle';
   }
 
   update() {
@@ -118,7 +99,6 @@ class Robot {
     this.currentState = 'WALK_RIGHT';
 
     this.spineObject.setScale(this.scale, this.scale);
-
 
     this.changeAnimation(true);
   }
