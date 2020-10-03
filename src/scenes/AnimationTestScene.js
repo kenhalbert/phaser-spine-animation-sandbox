@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import Robot from '../entities/Robot';
-import FistBumpingRobots from '../entities/FistBumpingRobots';
 import PlayerControls from '../input/PlayerControls';
+import FistBumpInteraction from '../interactions/FistBumpInteraction';
 
 class AnimationTestScene extends Phaser.Scene {
   constructor () {
@@ -37,12 +37,26 @@ class AnimationTestScene extends Phaser.Scene {
     this.sceneData.player = new Robot(this, 'player');
     this.sceneData.player.initialize(100, 1800);
 
+    this.sceneData.robotNpc = new Robot(this, 'robotNpc');
+    this.sceneData.robotNpc.initialize(1660, 384);
+    this.sceneData.robotNpc.turnLeft();
+
     this.physics.add.collider(
       this.sceneData.player.getContainer(), 
       this.sceneData.map.platforms
     );
+    this.physics.add.collider(
+      this.sceneData.robotNpc.getContainer(), 
+      this.sceneData.map.platforms
+    );
+    this.physics.add.collider(
+      this.sceneData.robotNpc.getContainer(), 
+      this.sceneData.player.getContainer()
+    );
 
     this.sceneData.controls = new PlayerControls(this);
+
+    this.sceneData.interactions.fistBump = new FistBumpInteraction(this);
 
     this.cameras.main.setBounds(
       0, 
@@ -55,24 +69,9 @@ class AnimationTestScene extends Phaser.Scene {
 
     this.sceneData.controls.onInteract(
       () => {
-        this.sceneData.player.idle();
-
-        const playerContainer = this.sceneData.player.getContainer();
-
-        playerContainer.setVisible(false);
-        playerContainer.setActive(false);
-
-        const fistBumpingRobots = new FistBumpingRobots(this, 'fistBump');
-        fistBumpingRobots.initialize(playerContainer.x + 55, playerContainer.y);
-
-        fistBumpingRobots.onAnimationComplete(
-          () => {
-            fistBumpingRobots.destroy();
-
-            playerContainer.setActive(true);
-            playerContainer.setVisible(true);
-          }
-        )
+        if (this.sceneData.interactions.fistBump.canInteract()) {
+          this.sceneData.interactions.fistBump.interact();
+        }
       }
     )
   }
@@ -108,9 +107,13 @@ class AnimationTestScene extends Phaser.Scene {
   initProperties() {
     this.sceneData = {
       player: null,
+      robotNpc: null,
       controls: null,
       map: {
         platforms: null
+      },
+      interactions: {
+        fistBump: null
       }
     };
   }

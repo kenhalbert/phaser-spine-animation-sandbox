@@ -28,10 +28,11 @@ class Robot extends SpineEntityBase {
     this.spineObject.setMix('run', 'walk', this.animationMixTransitionLength);
     this.spineObject.setMix('run', 'idle', this.animationMixTransitionLength);
     this.spineObject.setMix('run', 'fall', this.animationMixTransitionLength);
-    this.spineObject.setMix('jump', 'fall', this.animationMixTransitionLength);
     this.spineObject.setMix('fall', 'run', this.animationMixTransitionLength);
     this.spineObject.setMix('fall', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('fall', 'walk', this.animationMixTransitionLength);
     this.spineObject.setMix('jump', 'idle', this.animationMixTransitionLength);
+    this.spineObject.setMix('jump', 'fall', this.animationMixTransitionLength);
   }
 
   getDefaultAnimationName() {
@@ -75,6 +76,14 @@ class Robot extends SpineEntityBase {
 
   changeAnimation(loop) {
     this.spineObject.play(this.getCurrentAnimation(), loop);
+  }
+
+  turnLeft() {
+    this.spineObject.setScale(-this.scale, this.scale);
+  }
+
+  turnRight() {
+    this.spineObject.setScale(-this.scale, this.scale);
   }
 
   walkLeft() {
