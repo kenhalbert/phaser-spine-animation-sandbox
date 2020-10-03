@@ -3,6 +3,7 @@ import Robot from '../entities/Robot';
 import PlayerControls from '../input/PlayerControls';
 import FistBumpInteraction from '../interactions/FistBumpInteraction';
 import RobotInputController from '../controllers/RobotInputController';
+import ProximitySwitch from '../physics/ProximitySwitch';
 
 class AnimationTestScene extends Phaser.Scene {
   constructor () {
@@ -80,10 +81,23 @@ class AnimationTestScene extends Phaser.Scene {
           this.sceneData.interactions.fistBump.interact();
         }
       }
-    )
+    );
+
+    this.sceneData.proximitySwitches.playerRobotNpc = new ProximitySwitch(
+      this,
+      120,
+      10,
+      this.sceneData.player.getContainer(),
+      this.sceneData.robotNpc.getContainer(),
+      () => this.events.emit('playerInFistBumpRange'),
+      () => this.events.emit('playerOutOfFistBumpRange')
+    );
+
+    this.scene.launch('HelpTextSubscene', this);
   }
 
   update() {
+    this.sceneData.proximitySwitches.playerRobotNpc.checkProximity();
     this.sceneData.controllers.playerController.update();
   }
 
@@ -92,6 +106,9 @@ class AnimationTestScene extends Phaser.Scene {
       player: null,
       robotNpc: null,
       controls: null,
+      proximitySwitches: {
+        playerRobotNpc: null,
+      },
       map: {
         platforms: null
       },

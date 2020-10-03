@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import ControllerBase from './ControllerBase';
 
 class RobotInputController extends ControllerBase {
-  constructor (scene, controls, robot) {
+  constructor(scene, controls, robot) {
     super(scene);
 
     this.controls = controls;

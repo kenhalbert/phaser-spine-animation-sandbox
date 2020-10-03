@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
 import FistBumpingRobots from '../entities/FistBumpingRobots';
+import InteractionBase from './InteractionBase';
 
-class FistBumpInteraction {
+class FistBumpInteraction extends InteractionBase {
   constructor(scene) {
-    this.scene = scene;
+    super(scene);
 
     this.actorDistanceX = 120;
   }
@@ -16,14 +17,12 @@ class FistBumpInteraction {
       && Math.abs(playerContainer.x - robotNpcContainer.x) <= this.actorDistanceX;
   }
 
-  interact() {
-    
+  doInteraction() {
     const playerContainer = this.scene.sceneData.player.getContainer();
     const robotNpcContainer = this.scene.sceneData.robotNpc.getContainer();
 
     this.scene.sceneData.controllers.playerController.pause();
     this.scene.sceneData.player.idle();
-
 
     this.scene.tweens.add({
       targets: playerContainer,
@@ -32,12 +31,12 @@ class FistBumpInteraction {
       ease: 'Linear',
 
       onComplete: () => {
-        this.doInteraction(playerContainer, robotNpcContainer);
+        this.playFistBumpAnimation(playerContainer, robotNpcContainer);
       }
     });
   }
 
-  doInteraction(playerContainer, robotNpcContainer) {
+  playFistBumpAnimation(playerContainer, robotNpcContainer) {
     playerContainer.setVisible(false);
     playerContainer.setActive(false);
     
@@ -57,6 +56,7 @@ class FistBumpInteraction {
         robotNpcContainer.setVisible(true);
         robotNpcContainer.setActive(true);
 
+        this.completeInteraction();
         this.scene.sceneData.controllers.playerController.resume();
       }
     )

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 class ControllerBase {
-  constructor (scene) {
+  constructor(scene) {
     this.scene = scene;
     
     this.isPaused = false;
