@@ -17,8 +17,13 @@ class FistBumpInteraction {
   }
 
   interact() {
+    
     const playerContainer = this.scene.sceneData.player.getContainer();
     const robotNpcContainer = this.scene.sceneData.robotNpc.getContainer();
+
+    this.scene.sceneData.controllers.playerController.pause();
+    this.scene.sceneData.player.idle();
+
 
     this.scene.tweens.add({
       targets: playerContainer,
@@ -51,6 +56,8 @@ class FistBumpInteraction {
 
         robotNpcContainer.setVisible(true);
         robotNpcContainer.setActive(true);
+
+        this.scene.sceneData.controllers.playerController.resume();
       }
     )
   }

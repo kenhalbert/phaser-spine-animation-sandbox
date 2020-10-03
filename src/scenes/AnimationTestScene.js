@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import Robot from '../entities/Robot';
 import PlayerControls from '../input/PlayerControls';
 import FistBumpInteraction from '../interactions/FistBumpInteraction';
+import RobotInputController from '../controllers/RobotInputController';
 
 class AnimationTestScene extends Phaser.Scene {
   constructor () {
@@ -56,6 +57,12 @@ class AnimationTestScene extends Phaser.Scene {
 
     this.sceneData.controls = new PlayerControls(this);
 
+    this.sceneData.controllers.playerController = new RobotInputController(
+      this,
+      this.sceneData.controls,
+      this.sceneData.player
+    );
+
     this.sceneData.interactions.fistBump = new FistBumpInteraction(this);
 
     this.cameras.main.setBounds(
@@ -77,31 +84,7 @@ class AnimationTestScene extends Phaser.Scene {
   }
 
   update() {
-    this.updatePlayer();
-  }
-
-  updatePlayer() {
-    if (!this.sceneData.player.getContainer().active) return;
-    
-    this.sceneData.player.update();
-
-    if (this.sceneData.controls.isJumpActive()) {
-      this.sceneData.player.jump();
-    }
-
-    if (this.sceneData.controls.isMoveLeftActive()) {
-      if (this.sceneData.controls.isWalkActive())
-        this.sceneData.player.walkLeft();
-      else
-        this.sceneData.player.runLeft();
-    } else if (this.sceneData.controls.isMoveRightActive()) {
-      if (this.sceneData.controls.isWalkActive())
-        this.sceneData.player.walkRight();
-      else
-        this.sceneData.player.runRight();
-    } else {
-      this.sceneData.player.idle();
-    }
+    this.sceneData.controllers.playerController.update();
   }
 
   initProperties() {
@@ -114,6 +97,9 @@ class AnimationTestScene extends Phaser.Scene {
       },
       interactions: {
         fistBump: null
+      },
+      controllers: {
+        playerController: null
       }
     };
   }

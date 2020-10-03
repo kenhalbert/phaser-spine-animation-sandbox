@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-import SpineArcadePhysicsContainer from '../physics/SpineArcadePhysicsContainer';
 import SpineEntityBase from './SpineEntityBase';
 
 class Robot extends SpineEntityBase {
