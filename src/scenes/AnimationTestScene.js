@@ -73,7 +73,14 @@ class AnimationTestScene extends Phaser.Scene {
       2000
     );
 
-    this.cameras.main.startFollow(this.sceneData.player.getContainer(), true);
+    this.cameras.main.startFollow(
+      this.sceneData.player.getContainer(), 
+      true,
+      1,
+      1,
+      0,
+      150
+    );
 
     this.sceneData.controls.onInteract(
       () => {
